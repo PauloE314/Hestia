@@ -1,4 +1,6 @@
-
+/**
+ * Color's abstraction
+ */
 export default class Color {
   element = null;
   value = null;

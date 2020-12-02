@@ -24,16 +24,18 @@
       <aside id="tool-bar">
         <ul>
           <div class="row">
-            <li class="selected tool" title="Caneta">
+            <li id="pen" class="selected tool" title="Caneta">
               <img src="../assets/tools/pen.svg" />
             </li>
-            <li class="tool" title="Apagar">
+            <li id="eraser" class="tool" title="Apagar">
               <img src="../assets/tools/eraser.svg" />
             </li>
           </div>
         </ul>
       </aside>
-      <main id="display"></main>
+      <main id="display">
+        <canvas></canvas>
+      </main>
       <aside id="controller-bar">
         <div>
           <label for="layer-list">Layers</label>
@@ -57,7 +59,7 @@
     </div>
   </div>
 
-  <script src="../js/script.js"></script>
+  <script src="../js/script.js" type="module"></script>
   <script src="https://kit.fontawesome.com/86b9389f1a.js" crossorigin="anonymous"></script>
 </body>
 </html>
