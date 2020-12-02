@@ -1,0 +1,36 @@
+:root {
+  --bg-color:#17181f;
+  --bg-color-light: #292b36;
+  --bg-color-extralight: #363847;
+  --text-color: #f8f8f2;
+  --strong-font: "Press Start 2P";
+  --simple-font: "VT323";
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  color: var(--text-color);
+  list-style: none;
+}
+
+body {
+  background-color: var(--bg-color);
+}
+
+.overflow::-webkit-scrollbar {
+  width: 10px;
+}
+.overflow::-webkit-scrollbar-track {
+  background: var(--bg-color-light);
+}
+.overflow::-webkit-scrollbar-thumb {
+  background: var(--bg-color);
+}
+
+.selected {
+  border: 2px solid white;
+}

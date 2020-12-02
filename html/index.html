@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sprite creator</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div id="page">
+    <header id="nav-bar">
+      <div id="control">
+        <button title="Salvar"><i class="fas fa-save icon"></i></button>
+        <button title="Desfazer"><i class="fas fa-undo icon"></i></button>
+        <button title="Refazer" disabled><i class="fas fa-redo-alt icon"></i></button>
+      </div>
+      <span title="Nome do arquivo" contenteditable>FILE NAME</span>
+      <button title="Configurações"><i class="fas fa-cogs icon"></i></button>
+    </header>
+    <div id="content">
+      <aside id="tool-bar">
+        <ul>
+          <div class="row">
+            <li class="selected tool" title="Caneta">
+              <img src="../assets/tools/pen.svg" />
+            </li>
+            <li class="tool" title="Apagar">
+              <img src="../assets/tools/eraser.svg" />
+            </li>
+          </div>
+        </ul>
+      </aside>
+      <main id="display"></main>
+      <aside id="controller-bar">
+        <div>
+          <label for="layer-list">Layers</label>
+          <ul id="layer-list" class="overflow">
+          </ul>
+          <div id="layer-footer">
+              <button id="new-layer" title="Nova camada">
+                <i class="fas fa-file icon"></i>
+              </button>
+              <button id="remove-layer" title="Remover camada">
+                <i class="fas fa-trash icon"></i>
+              </button>
+          </div>
+        </div>
+        <div>
+          <label for="color-list">Colors</label>
+          <ul id="color-list" class="overflow">
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script src="../js/script.js"></script>
+  <script src="https://kit.fontawesome.com/86b9389f1a.js" crossorigin="anonymous"></script>
+</body>
+</html>

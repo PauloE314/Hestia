@@ -1,0 +1,156 @@
+#page {
+  height: 100vh;
+  width: 100vw;
+  min-width: 45rem !important;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Nav */
+#nav-bar {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-color-light);
+  padding: 1.5rem 2rem;
+}
+#nav-bar span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--strong-font);
+  font-size: 1.3rem;
+}
+#nav-bar button {
+  background-color: transparent;
+  cursor: pointer;
+}
+#nav-bar button .icon {
+  transition: filter 0.15s;
+  font-size: 1.3rem;
+  padding: 0.3rem 1.5rem;
+}
+#nav-bar button:hover .icon, #nav-bar button:disabled .icon {
+  filter: brightness(50%);
+}
+
+/* Content */
+#content {
+  display: flex;
+  height: 100%;
+}
+
+/* Tool bar */
+#content #tool-bar {
+  padding: 1rem ;
+  background-color: var(--bg-color-extralight);
+}
+#content #tool-bar .row {
+  display: flex;
+}
+#content #tool-bar li {
+  margin: 0.25rem;
+  border: none !important;
+
+  background-color: transparent;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  transition: background-color 0.15s, filter 0.15s;
+}
+
+#content #tool-bar li.selected {
+  background-color: var(--bg-color-light);
+  filter: none !important;
+}
+#content #tool-bar li:hover {
+  filter: brightness(50%);
+}
+#content #tool-bar li img {
+  width: 3rem;
+}
+
+/* Control bar */
+#content #controller-bar {
+  background-color: var(--bg-color-extralight);
+  width: 25rem;
+}
+#content #controller-bar label {
+  display: block;
+  text-align: center;
+  padding: 0.8rem 2rem; 
+  font-family: var(--simple-font);
+  opacity: 0.7;
+  font-size: 2rem;
+  background-color: var(--bg-color);
+}
+/* Layer list */
+#content #controller-bar #layer-list {
+  height: 14rem;
+  overflow-y: auto;
+}
+
+#content #controller-bar #layer-list li {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  padding: 0.7rem 1rem;
+  background-color: var(--bg-color-light);
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+  justify-content: space-between;
+}
+#content #controller-bar #layer-list li span {
+  opacity: 0.8;
+}
+#content #controller-bar #layer-list li button {
+  background-color: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+#content #controller-bar #layer-footer {
+  display: flex;
+  justify-content: flex-end;
+  background: var(--bg-color-light);
+}
+#content #controller-bar #layer-footer button {
+  background-color: transparent;
+  margin: 0.8rem;
+  cursor: pointer;
+}
+#content #controller-bar #layer-footer button .icon {
+  font-size: 1.1rem;
+}
+/* Color list */
+#content #controller-bar #color-list {
+  padding: 0.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-height: 13.5rem;
+  overflow-y: auto;
+}
+#content #controller-bar #color-list::after {
+  content: "";
+  flex: auto;
+}
+#content #controller-bar #color-list li {
+  width: 3rem;
+  height: 3rem;
+  margin: 0.2rem;
+  cursor: pointer;
+  border-radius: 0.3rem;
+}
+
+
+
+#content #display {
+  padding: 1rem;
+  margin: 2rem;
+  background-color: black;
+  width: 100%;
+  position: sticky;
+}
+
