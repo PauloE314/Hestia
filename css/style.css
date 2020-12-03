@@ -145,12 +145,16 @@
 }
 
 
-
+/* Display */
 #content #display {
-  padding: 1rem;
   margin: 2rem;
   background-color: black;
   width: 100%;
   position: sticky;
 }
-
+/* Canvas */
+#content #display canvas {
+  background-color:white;
+  width: 100%;
+  height: 100%;
+}

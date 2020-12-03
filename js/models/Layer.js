@@ -1,13 +1,49 @@
+import Color from "./Color.js";
+
 /**
  * Layer's abstraction
  */
 export default class Layer {
+  /**
+   * Layer's html element
+   * @type {HTMLLIElement}
+   */
   element = null;
+
+  /**
+   * Grid's class element
+   * @type {LayerGrid}
+   */
+  grid = null;
+
+  /**
+   * Sets layer to visible or not
+   * @type {bool}
+   */
   isVisible = true;
 
+  /**
+   * Created laye count helper
+   * @type {umber}
+   */
   static layerCount = 0;
+
+  /**
+   * Layer list of element
+   * @type {Array<Layer>}
+   */
   static layerList = [];
+
+  /**
+   * Element in which the layers controller are rendered
+   * @type {HTMLUListElement}
+   */
   static layerListElement = document.getElementById('layer-list');
+
+  /**
+   * Current selected layer
+   * @type {Layer}
+   */
   static currentLayer = null;
 
   /**
@@ -16,6 +52,7 @@ export default class Layer {
    */
   constructor(label) {
     this.element = document.createElement('li');
+    this.grid = new LayerGrid();
 
     const buttonElement = document.createElement('button');
     buttonElement.innerHTML = `<i class="far fa-eye .icon"></i>`;
@@ -81,5 +118,32 @@ export default class Layer {
         newLayer.selectLayer();
       }
     }
+  }
+}
+
+/**
+ * Grid abstraction
+ * 
+ */
+class LayerGrid {
+  /**
+   * @type {Array<{x: number, y: number, color: Color}>}
+   */
+  pixelList = [];
+
+  /**
+   * Set a pixel in grid
+   * @param {number} x X poisition
+   * @param {number} y Y position
+   * @param {Color} color Color (r, g, b)
+   */
+  setPixel(x, y, color) {
+    for (const pixel of this.pixelList) {
+      if (pixel.x == x && pixel.y == y) {
+        pixel.color = color;
+        return;
+      }
+    }
+    this.pixelList.push({ x, y, color });
   }
 }

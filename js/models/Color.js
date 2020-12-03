@@ -2,41 +2,76 @@
  * Color's abstraction
  */
 export default class Color {
+  /**
+   * Element in which user can control or select the color
+   * @type {HTMLLIElement}
+   */
   element = null;
+
+  /**
+   * Color value
+   * @type {{ r: number, g: number, b: number }}
+   */
   value = null;
 
+  /**
+   * Color list
+   * @type {Array<Color>}
+   */
+  static colorList = [];
+
+  /**
+   * Element that contains the color's html element
+   * @type {HTMLUListElement}
+   */
+  static colorLisElemet = document.getElementById('color-list');
+
+  /**
+   * Current selected color
+   * @type {Color}
+   */
+  static currentColor = null;
+
+  /**
+   * @param {number} r red
+   * @param {number} g green
+   * @param {number} b blue
+   */
   constructor(r, g, b) {
     this.element = document.createElement('li');
     this.element.classList.add('color');
-    this.changeColor(r, g, b);
+    this.setColor(r, g, b);
 
-    this.element.onclick = () => {
-      colorList.forEach(color => color.element.classList.remove('selected'));
-      this.element.classList.add('selected');
-      currentColor = this;
-    }
+    this.element.onclick = () => this.selectColor();
 
-    if (colorList.length == 0) {
-      this.element.classList.add('selected');
-      currentColor = this;
-    }
+    if (Color.colorList.length == 0) this.selectColor();
 
-    colorList.push(this);
-    colorLisElemet.appendChild(this.element);
+    Color.colorList.push(this);
+    Color.colorLisElemet.appendChild(this.element);
   }
 
-  // Color
-  changeColor(r, g, b) {
+  /**
+   * Sets element's color
+   * @param {number} r red
+   * @param {number} g green
+   * @param {number} b blue
+   */
+  setColor(r, g, b) {
     const newColor = `rgb(${r}, ${g}, ${b})`;
 
     this.value = {r, g, b};
     this.element.style.backgroundColor = newColor;
     this.element.title = newColor;
   }
+
+  /**
+   * Selects element
+   */
+  selectColor() {
+    Color.colorList.forEach(color => color.element.classList.remove('selected'));
+    Color.currentColor = this;
+    this.element.classList.add("selected");
+  }
+  
 }
 
-export function setupColors() {
-  new Color(255, 0, 0);
-  new Color(0, 255, 0);
-  new Color(0, 0, 255);
-}
