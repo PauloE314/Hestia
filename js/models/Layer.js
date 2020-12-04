@@ -70,9 +70,7 @@ export default class Layer {
     this.element.onclick = (e) => this.selectLayer(e);
 
     // Handles no layer
-    if (Layer.layerList.length == 0) {
-      this.selectLayer();
-    }
+    if (Layer.layerList.length == 0)  this.selectLayer();
 
     Layer.layerCount++;
     Layer.layerList.push(this);
@@ -106,7 +104,7 @@ export default class Layer {
   /**
    * Deletes current layer
    */
-  static removeCurrentLayer() {
+  removeLayer() {
     if (Layer.currentLayer) {
       const index = Layer.layerList.indexOf(Layer.currentLayer);
       const newLayer = Layer.layerList[index - 1 < 0 ? 0 : index - 1];
@@ -146,4 +144,13 @@ class LayerGrid {
     }
     this.pixelList.push({ x, y, color });
   }
+}
+
+
+/**
+ * Creates a new layer
+ * @param {string} label
+ */
+export function createLayer(label) {
+  return new Layer(label);
 }

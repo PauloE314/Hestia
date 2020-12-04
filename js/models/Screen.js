@@ -22,35 +22,24 @@ export default class Screen {
    */
   isMouseDown = false;
 
-  /**
-   * Screen singleton instance
-   * @type {Screen}
-   */
-  static current = null;
 
   constructor() {
-    if (!Screen.current) {
-      const { width, height } = document.getElementById('display').getBoundingClientRect();
+    const { width, height } = document.getElementById('display').getBoundingClientRect();
 
-      Screen.current = this;
-      Screen.current.canvas = document.querySelector('canvas');
-      Screen.current.setScreenSize(width, height);
-      Screen.current.ctx = this.canvas.getContext('2d');
-  
-      return this;
-    }
-    return Screen.current;
+    this.canvas = document.querySelector('canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.setScreenSize(width, height);
   }
 
   /**
    * Renders new state on screen
    * @param {Array<Layer>} layerList
    */
-  render(layerList) {
+  renderLayers(layerList) {
     // Clear
-    const screenWidth = Screen.current.canvas.width;
-    const screenHeight = Screen.current.canvas.height;
-    Screen.current.ctx.clearRect(0, 0, screenWidth, screenHeight);
+    const screenWidth = this.canvas.width;
+    const screenHeight = this.canvas.height;
+    this.ctx.clearRect(0, 0, screenWidth, screenHeight);
 
     const pixelSize = this.getPixelSize();
 
@@ -76,8 +65,8 @@ export default class Screen {
    * @param {number} height
    */
   setScreenSize(width, height) {
-    Screen.current.canvas.width = width;
-    Screen.current.canvas.height = height;
+    this.canvas.width = width;
+    this.canvas.height = height;
   }
 
   /**
