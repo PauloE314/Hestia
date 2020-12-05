@@ -1,65 +1,83 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sprite creator</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/base.css">
-  <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
-  <div id="page">
-    <header id="nav-bar">
-      <div id="control">
-        <button id="save" title="Salvar"><i class="fas fa-save icon"></i></button>
-        <button id="undo" title="Desfazer"><i class="fas fa-undo icon"></i></button>
-        <button id="redo" title="Refazer" disabled><i class="fas fa-redo-alt icon"></i></button>
-      </div>
-      <span title="Nome do arquivo" contenteditable>FILE NAME</span>
-      <button title="Configurações"><i class="fas fa-cogs icon"></i></button>
-    </header>
-    <div id="content">
-      <aside id="tool-bar">
-        <ul>
-          <div class="row">
-            <li id="pen" class="selected tool" title="Caneta">
-              <img src="../assets/tools/pen.svg" />
-            </li>
-            <li id="eraser" class="tool" title="Apagar">
-              <img src="../assets/tools/eraser.svg" />
-            </li>
-          </div>
-        </ul>
-      </aside>
-      <main id="display">
-        <canvas></canvas>
-      </main>
-      <aside id="controller-bar">
-        <div>
-          <label for="layer-list">Layers</label>
-          <ul id="layer-list" class="overflow">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sprite creator</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <div id="page">
+      <header id="nav-bar">
+        <div id="control">
+          <button id="save" title="Salvar">
+            <i class="fas fa-save icon"></i>
+          </button>
+          <button id="undo" title="Desfazer">
+            <i class="fas fa-undo icon"></i>
+          </button>
+          <button id="redo" title="Refazer" disabled>
+            <i class="fas fa-redo-alt icon"></i>
+          </button>
+        </div>
+        <span title="Nome do arquivo" contenteditable>FILE NAME</span>
+        <button title="Configurações"><i class="fas fa-cogs icon"></i></button>
+      </header>
+      <div id="content">
+        <aside id="tool-bar">
+          <ul id="tool-list">
+            <div class="row">
+              <li id="pen" class="selected tool" title="Caneta">
+                <img src="../assets/tools/pen.svg" />
+              </li>
+              <li id="eraser" class="tool" title="Apagar">
+                <img src="../assets/tools/eraser.svg" />
+              </li>
+            </div>
           </ul>
-          <div id="layer-footer">
+        </aside>
+        <main id="display">
+          <canvas></canvas>
+        </main>
+        <aside id="controller-bar">
+          <div id="layers">
+            <label for="layer-list">Layers</label>
+            <ul id="layer-list" class="overflow"></ul>
+            <div class="controller-section-footer">
               <button id="new-layer" title="Nova camada">
                 <i class="fas fa-file icon"></i>
               </button>
               <button id="remove-layer" title="Remover camada">
                 <i class="fas fa-trash icon"></i>
               </button>
+            </div>
           </div>
-        </div>
-        <div>
-          <label for="color-list">Colors</label>
-          <ul id="color-list" class="overflow">
-          </ul>
-        </div>
-      </aside>
+          <div id="colors">
+            <label for="color-list">Colors</label>
+            <ul id="color-list" class="overflow"></ul>
+            <div class="controller-section-footer">
+              <button id="new-color" title="Nova cor">
+                <i class="fas fa-file icon"></i>
+              </button>
+              <button id="remove-color" title="Remover camada">
+                <i class="fas fa-trash icon"></i>
+              </button>
+            </div>
+          </div>
+        </aside>
+      </div>
     </div>
-  </div>
 
-  <script src="../js/script.js" type="module"></script>
-  <script src="https://kit.fontawesome.com/86b9389f1a.js" crossorigin="anonymous"></script>
-</body>
+    <script src="../js/script.js" type="module"></script>
+    <script
+      src="https://kit.fontawesome.com/86b9389f1a.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>

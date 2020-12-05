@@ -3,12 +3,6 @@
  */
 export default class Color {
   /**
-   * Element in which user can control or select the color
-   * @type {HTMLLIElement}
-   */
-  element = null;
-
-  /**
    * Color value
    * @type {{ r: number, g: number, b: number }}
    */
@@ -24,7 +18,7 @@ export default class Color {
    * Element that contains the color's html element
    * @type {HTMLUListElement}
    */
-  static colorLisElemet = document.getElementById('color-list');
+  static colorLisElement = document.getElementById("color-list");
 
   /**
    * Current selected color
@@ -38,8 +32,8 @@ export default class Color {
    * @param {number} b blue
    */
   constructor(r, g, b) {
-    this.element = document.createElement('li');
-    this.element.classList.add('color');
+    this.element = document.createElement("li");
+    this.element.classList.add("color");
     this.setColor(r, g, b);
 
     this.element.onclick = () => this.selectColor();
@@ -47,7 +41,7 @@ export default class Color {
     if (Color.colorList.length == 0) this.selectColor();
 
     Color.colorList.push(this);
-    Color.colorLisElemet.appendChild(this.element);
+    Color.colorLisElement.appendChild(this.element);
   }
 
   /**
@@ -59,7 +53,7 @@ export default class Color {
   setColor(r, g, b) {
     const newColor = `rgb(${r}, ${g}, ${b})`;
 
-    this.value = {r, g, b};
+    this.value = { r, g, b };
     this.element.style.backgroundColor = newColor;
     this.element.title = newColor;
   }
@@ -68,7 +62,9 @@ export default class Color {
    * Selects element
    */
   selectColor() {
-    Color.colorList.forEach(color => color.element.classList.remove('selected'));
+    Color.colorList.forEach((color) =>
+      color.element.classList.remove("selected")
+    );
     Color.currentColor = this;
     this.element.classList.add("selected");
   }
@@ -76,78 +72,15 @@ export default class Color {
   /**
    * Remove current color
    */
-  removeColor() {
-    
-  }
-}
-
-/**
- * Color's abstraction
- */
-export default class Color {
-  element = null;
-  value = null;
-
-  static colorList = [];
-  static colorLisElemet = document.getElementById('color-list');
-  static currentColor = null;
-
-  /**
-   * @param {number} r red
-   * @param {number} g green
-   * @param {number} b blue
-   */
-  constructor(r, g, b) {
-    this.element = document.createElement('li');
-    this.element.classList.add('color');
-    this.setColor(r, g, b);
-
-    this.element.onclick = () => this.selectColor();
-
-    if (Color.colorList.length == 0) this.selectColor();
-
-    Color.colorList.push(this);
-    Color.colorLisElemet.appendChild(this.element);
-  }
-
-  /**
-   * Sets element's color
-   * @param {number} r red
-   * @param {number} g green
-   * @param {number} b blue
-   */
-  setColor(r, g, b) {
-    const newColor = `rgb(${r}, ${g}, ${b})`;
-
-    this.value = {r, g, b};
-    this.element.style.backgroundColor = newColor;
-    this.element.title = newColor;
-  }
-
-  /**
-   * Selects element
-   */
-  selectColor() {
-    Color.colorList.forEach(color => color.element.classList.remove('selected'));
-    Color.currentColor = this;
-    this.element.classList.add("selected");
-  }
-
-  /**
-   * Remove current color
-   */
-  removeColor() {
-    
-  }
+  removeColor() {}
 }
 
 /**
  * Creates a new Color
- * @param {number} r 
- * @param {number} g 
- * @param {number} b 
+ * @param {number} r
+ * @param {number} g
+ * @param {number} b
  */
 export function createColor(r, g, b) {
   return new Color(r, g, b);
 }
-

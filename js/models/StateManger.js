@@ -1,11 +1,11 @@
+import { createOne } from "../utils/index.js";
 import Color from "./Color.js";
 import Layer from "./Layer.js";
 
 /**
  * State's abstraction
  */
-export default class StateManager {
-  
+class StateManager {
   /**
    * @type {Array<{color: Color, layers: Array<Layer>}>}
    */
@@ -25,7 +25,7 @@ export default class StateManager {
   static updateState() {
     const state = {
       color: Color.currentColor,
-      layerList: Layer.layerList.map(e => e)
+      layerList: Layer.layerList.map((e) => e),
     };
 
     this.stateList.push(state);
@@ -37,7 +37,7 @@ export default class StateManager {
 
     this.stateIndex = this.stateList.length - 1;
 
-    console.log(this.stateList, this.stateIndex)
+    console.log(this.stateList, this.stateIndex);
   }
 
   /**
@@ -49,4 +49,11 @@ export default class StateManager {
 
     return this.getState();
   }
+}
+
+/**
+ * Creates only one state manager
+ */
+export function createStateManager() {
+  return createOne(StateManager);
 }

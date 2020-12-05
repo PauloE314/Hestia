@@ -1,30 +1,43 @@
-import StateManager from './models/StateManger.js';
-import Screen from './models/Screen.js';
-import Color, { createColor } from './models/Color.js';
-import Layer, { createLayer } from './models/Layer.js';
+import { createStateManager } from "./models/StateManger.js";
+import { createScreen, getMaxDimensions } from "./models/Screen.js";
+import Color, { createColor } from "./models/Color.js";
+import Layer, { createLayer } from "./models/Layer.js";
+import Tool from "./models/Tool.js";
+import { createPen } from "./tools/Pen.js";
+import { createEraser } from "./tools/Eraser.js";
 
-const createLayerElement = document.getElementById('create-layer');
-const removeLayerElement = document.getElementById('remove-layer');
-const createColorElement = document.getElementById('create-color');
-const removeColorElement = document.getElementById('remove-color');
-const redoElement = document.getElementById('redo');
-const undoElement = document.getElementById('undo');
-const saveElement = document.getElementById('save');
-const canvasElement = document.querySelector('canvas');
+const createLayerElement = document.getElementById("new-layer");
+const removeLayerElement = document.getElementById("remove-layer");
+const createColorElement = document.getElementById("new-color");
+const removeColorElement = document.getElementById("remove-color");
+const redoElement = document.getElementById("redo");
+const undoElement = document.getElementById("undo");
+const saveElement = document.getElementById("save");
+const canvasElement = document.querySelector("canvas");
+const displayElement = document.getElementById("display");
 
 /**
  * Application's main function
  */
 function main() {
-  const screen = new Screen();
-  const stateManager = new StateManager();
-  
+  const screen = createScreen(getMaxDimensions(displayElement), canvasElement);
+  const stateManager = createStateManager();
+
+  // Loads all tools
+  loadTools();
+
   // Layer logic
   createLayerElement.onclick = () => createLayer();
-  removeLayerElement.onclick = () => Layer.currentLayer.removeLayer();
+  removeLayerElement.onclick = () => {
+    Layer.currentLayer.removeLayer();
+
+    // Renders changes
+    screen.clearScreen();
+    screen.renderLayers(Layer.layerList);
+  };
 
   // Color logic
-  createColorElement.onclick = () => createColor();
+  createColorElement.onclick = () => createColor(255, 255, 255);
   removeColorElement.onclick = () => Color.currentColor.removeColor();
 
   // State logic
@@ -35,18 +48,33 @@ function main() {
   saveElement.onclick = () => {};
 
   // Draw logic
-  canvasElement.onclick = () => {};
+  canvasElement.onclick = (e) => {
+    const { x, y } = screen.getGridPositionOnScreen(e.clientX, e.clientY);
+    const { currentTool } = Tool;
+    const { currentColor } = Color;
+    const { currentLayer, layerList } = Layer;
 
+    // Tool action
+    currentTool.action(e, {
+      layer: currentLayer,
+      color: currentColor,
+      x,
+      y,
+      screen,
+    });
 
-  // Click test
-  // Screen.current.canvas.onclick = (e) => {
-  //   const { x, y } = Screen.current.getGridPositionOnScreen(e.clientX, e.clientY);
+    // Renders
+    screen.clearScreen();
+    screen.renderLayers(layerList);
+  };
 
-  //   Layer.currentLayer.grid.setPixel(x, y, Color.currentColor);
+  // Handle resize
+  window.addEventListener("resize", () => {
+    const { layerList } = Layer;
 
-  //   Application.updateState();
-  //   Screen.current.render(Application.getState().layerList);
-  // }
+    screen.setScreenSize(getMaxDimensions(displayElement));
+    screen.renderLayers(layerList);
+  });
 }
 
 /**
@@ -60,6 +88,14 @@ function setInitialState() {
 
   // Layer setup
   createLayer("Camada 0");
+}
+
+/**
+ * Loads all tools
+ */
+function loadTools() {
+  createPen();
+  createEraser();
 }
 
 // Source code
