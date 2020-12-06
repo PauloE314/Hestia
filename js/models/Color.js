@@ -4,9 +4,9 @@
 export default class Color {
   /**
    * Color value
-   * @type {{ r: number, g: number, b: number }}
+   * @type {string}
    */
-  value = null;
+  value = "#ffffff";
 
   /**
    * Color list
@@ -18,7 +18,7 @@ export default class Color {
    * Element that contains the color's html element
    * @type {HTMLUListElement}
    */
-  static colorLisElement = document.getElementById("color-list");
+  static colorListElement = document.getElementById("color-list");
 
   /**
    * Current selected color
@@ -27,35 +27,41 @@ export default class Color {
   static currentColor = null;
 
   /**
-   * @param {number} r red
-   * @param {number} g green
-   * @param {number} b blue
+   * @param {number} color Hex color
+   * @param {HTMLInputElement} inputElement
    */
-  constructor(r, g, b) {
+  constructor(color, inputElement) {
     this.element = document.createElement("li");
     this.element.classList.add("color");
-    this.setColor(r, g, b);
+    this.setColor(color);
 
     this.element.onclick = () => this.selectColor();
+    this.element.ondblclick = () => {
+      inputElement.value = this.value;
+      inputElement.click();
+
+      inputElement.oninput = () => this.setColor(inputElement.value);
+    };
 
     if (Color.colorList.length == 0) this.selectColor();
 
     Color.colorList.push(this);
-    Color.colorLisElement.appendChild(this.element);
+    Color.colorListElement.appendChild(this.element);
   }
 
   /**
-   * Sets element's color
-   * @param {number} r red
-   * @param {number} g green
-   * @param {number} b blue
+   * Handles element double click
    */
-  setColor(r, g, b) {
-    const newColor = `rgb(${r}, ${g}, ${b})`;
+  onDoubleClick() {}
 
-    this.value = { r, g, b };
-    this.element.style.backgroundColor = newColor;
-    this.element.title = newColor;
+  /**
+   * Sets element's color
+   * @param {string} color Hex color
+   */
+  setColor(color) {
+    this.value = color;
+    this.element.style.backgroundColor = color;
+    this.element.title = color;
   }
 
   /**
@@ -72,15 +78,34 @@ export default class Color {
   /**
    * Remove current color
    */
-  removeColor() {}
+  removeColor() {
+    const index = Color.colorList.indexOf(this);
+    const next = Color.colorList[index + 1] || Color.colorList[index - 1];
+
+    Color.colorListElement.removeChild(this.element);
+    Color.colorList = Color.colorList.filter((color) => color !== this);
+
+    if (next) {
+      next.selectColor();
+      return;
+    }
+    Color.currentColor = null;
+  }
 }
 
 /**
  * Creates a new Color
- * @param {number} r
- * @param {number} g
- * @param {number} b
+ * @param {string} color
+ * @param {HTMLInputElement} colorInput
  */
-export function createColor(r, g, b) {
-  return new Color(r, g, b);
+export function createColor(color, colorInput) {
+  return new Color(color, colorInput);
+}
+
+/**
+ * Removes a color
+ * @param {Color} color
+ */
+export function removeColor(color) {
+  color.removeColor();
 }

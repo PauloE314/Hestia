@@ -12,7 +12,7 @@ export default class Layer {
 
   /**
    * Grid's class element
-   * @type {Array<{ x: number, y: number, color: Color }>}
+   * @type {Array<{ x: number, y: number, color: string }>}
    */
   grid = null;
 
@@ -68,9 +68,7 @@ export default class Layer {
 
     // Element click
     this.element.onclick = (e) => this.selectLayer(e);
-
-    // Handles no layer
-    if (Layer.layerList.length == 0) this.selectLayer();
+    this.selectLayer();
 
     Layer.layerCount++;
     Layer.layerList.push(this);
@@ -83,7 +81,13 @@ export default class Layer {
   toggleVisibility() {
     this.isVisible = !this.isVisible;
     this.element.style.opacity = this.isVisible ? 1 : 0.5;
+    this.onToggle();
   }
+
+  /**
+   * Toggle callback
+   */
+  onToggle() {}
 
   /**
    * Handle layer click
@@ -110,9 +114,7 @@ export default class Layer {
       const newLayer = Layer.layerList[index - 1 < 0 ? 0 : index - 1];
 
       Layer.layerListElement.removeChild(Layer.currentLayer.element);
-      Layer.layerList = Layer.layerList.filter(
-        (layer) => layer != Layer.currentLayer
-      );
+      Layer.layerList = Layer.layerList.filter((layer) => layer !== this);
 
       // Selects current layer
       if (newLayer) {
@@ -125,7 +127,7 @@ export default class Layer {
    * Set a pixel the layer
    * @param {number} x X position
    * @param {number} y Y position
-   * @param {Color} color Color (r, g, b)
+   * @param {string} color Hex color
    */
   setPixel(x, y, color) {
     for (let i = 0; i < this.grid.length; i++) {
@@ -158,11 +160,15 @@ export default class Layer {
 
 /**
  * Creates a new layer
- * @param {string} label
  */
-export function createLayer(label) {
-  if (!label) {
-    label = `Camada ${Layer.layerCount}`;
-  }
-  return new Layer(label);
+export function createLayer() {
+  return new Layer(`Camada ${Layer.layerCount}`);
+}
+
+/**
+ * Removes a layer
+ * @param {Layer} layer
+ */
+export function removeLayer(layer) {
+  layer.removeLayer();
 }

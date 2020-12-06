@@ -54,5 +54,40 @@ export default class Tool {
    * @param {MouseEvent} event
    * @param {Object} options
    */
-  action(event, options) {}
+  clickAction(event, options) {}
+
+  /**
+   * Tool's main action
+   *
+   * @param {MouseEvent} event
+   * @param {Object} options
+   */
+  holdAction(event, options) {}
+}
+
+/**
+ * Actives some tool action
+ * @param {Screen} screen
+ * @param {string} name
+ * @param {MouseEvent} e
+ */
+export function toolAction(screen, name, e) {
+  const { x, y } = screen.getGridPositionOnScreen(e.clientX, e.clientY);
+  const { currentTool } = Tool;
+  const { currentColor } = Color;
+  const { currentLayer, layerList } = Layer;
+
+  // Tool action
+  const response = currentTool[name](e, {
+    layer: currentLayer,
+    color: currentColor,
+    x,
+    y,
+    screen,
+  });
+
+  // Renders
+  screen.renderLayers(layerList);
+
+  return response;
 }

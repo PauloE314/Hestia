@@ -14,11 +14,20 @@ class Eraser extends Tool {
    * @param {MouseEvent} event
    * @param {{ layer: Layer, x: number, y: number }} options
    */
-  action(event, options) {
+  clickAction(event, options) {
     const { layer, x, y } = options;
 
-    console.log(layer.grid.find((pixel) => pixel.x == x && pixel.y == y));
     layer.removePixel(x, y);
+  }
+
+  /**
+   * Erases pixels
+   *
+   * @param {MouseEvent} event
+   * @param {object} options
+   */
+  holdAction(event, options) {
+    this.clickAction(event, options);
   }
 }
 

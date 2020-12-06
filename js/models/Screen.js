@@ -4,7 +4,7 @@ import Layer from "./Layer.js";
 /**
  * Canvas screen abstraction
  */
-class Screen {
+export default class Screen {
   /**
    * Canvas element
    * @type {HTMLCanvasElement}
@@ -27,7 +27,7 @@ class Screen {
    * Screen instance
    * @type {Screen}
    */
-  instance = null;
+  static instance = null;
 
   /**
    *
@@ -38,22 +38,53 @@ class Screen {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
     this.setScreenSize(size);
+
+    this.canvas.onclick = (e) => this.onClick(e);
+    this.canvas.onmousedown = () => (this.isMouseDown = true);
+    this.canvas.onmouseup = () => {
+      this.isMouseDown = false;
+      this.onChange();
+    };
+    this.canvas.onmousemove = (e) => {
+      if (this.isMouseDown) this.onHold(e);
+    };
   }
+
+  /**
+   * Function which actives on click and hover
+   */
+  onHold() {}
+
+  /**
+   * Function which actives on click
+   * @param {MouseEvent}
+   */
+  onClick(e) {}
+
+  /**
+   * Function on something changes in grid
+   */
+  onChange() {}
 
   /**
    * Renders new state on screen
    * @param {Array<Layer>} layerList
    */
   renderLayers(layerList) {
+    this.clearScreen();
     const pixelSize = this.getPixelSize();
 
     for (const layer of layerList) {
-      for (const pixel of layer.grid) {
-        const { x, y } = pixel;
-        const { r, g, b } = pixel.color.value;
+      if (!layer.isVisible) continue;
 
-        this.ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-        this.ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+      for (const pixel of layer.grid) {
+        this.ctx.fillStyle = pixel.color;
+        this.ctx.fillRect(
+          pixel.x * pixelSize,
+          pixel.y * pixelSize,
+          pixelSize,
+          pixelSize
+        );
       }
     }
   }
@@ -117,6 +148,7 @@ export function getMaxDimensions(parent) {
  *
  * @param {number} size
  * @param {HTMLCanvasElement} canvas
+ * @returns {Screen}
  */
 export function createScreen(size, canvas) {
   return createOne(Screen, size, canvas);

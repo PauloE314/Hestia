@@ -125,6 +125,7 @@
   cursor: pointer;
 }
 #content .controller-section-footer {
+  position: relative;
   display: flex;
   justify-content: flex-end;
   background: var(--bg-color-light);
@@ -168,6 +169,12 @@
 }
 #content #controller-bar #color-list li.selected {
   border-color: white;
+}
+/* Input color */
+#content #controller-bar #color-input {
+  opacity: 0;
+  position: absolute;
+  left: -14rem;
 }
 
 /* Display */
