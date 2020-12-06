@@ -2,10 +2,11 @@ import { createStateManager } from "./models/StateManger.js";
 import Screen, { createScreen, getMaxDimensions } from "./models/Screen.js";
 import Color, { createColor, removeColor } from "./models/Color.js";
 import Layer, { createLayer, removeLayer } from "./models/Layer.js";
-import Tool, { toolAction } from "./models/Tool.js";
+import { toolAction } from "./models/Tool.js";
 import { createPen } from "./tools/Pen.js";
 import { createEraser } from "./tools/Eraser.js";
 
+const imageNameElement = document.getElementById("title");
 const createLayerElement = document.getElementById("new-layer");
 const removeLayerElement = document.getElementById("remove-layer");
 const createColorElement = document.getElementById("new-color");
@@ -17,11 +18,19 @@ const canvasElement = document.querySelector("canvas");
 const displayElement = document.getElementById("display");
 const colorInputElement = document.getElementById("color-input");
 
+var imageName = imageNameElement.innerHTML;
+
 /**
  * Application's main function
  */
 function main() {
   const screen = createScreen(getMaxDimensions(displayElement), canvasElement);
+  const stateManager = createStateManager();
+
+  // Handles image name change
+  imageNameElement.addEventListener("input", () => {
+    imageName = imageNameElement.value;
+  });
 
   // Create layer
   createLayerElement.addEventListener("click", () => {
@@ -56,7 +65,9 @@ function main() {
   undoElement.addEventListener("click", () => {});
 
   // Save logic
-  saveElement.addEventListener("click", () => {});
+  saveElement.addEventListener("click", () => {
+    stateManager.generateImage(screen, imageName);
+  });
 
   // Screen logic
   screen.onClick = (e) => toolAction(screen, "clickAction", e);

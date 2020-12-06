@@ -1,58 +1,30 @@
 import { createOne } from "../utils/index.js";
-import Color from "./Color.js";
-import Layer from "./Layer.js";
+import Screen from "./Screen.js";
 
 /**
  * State's abstraction
  */
 class StateManager {
   /**
-   * @type {Array<{color: Color, layers: Array<Layer>}>}
+   * @param {Screen} screen
+   * @param {string} imageName
    */
-  static stateList = [{ color: null, layers: [] }];
-  static stateIndex = 0;
+  generateImage(screen, imageName) {
+    const { canvas } = screen;
 
-  /**
-   * Gets current state
-   */
-  static getState() {
-    return this.stateList[this.stateIndex];
-  }
+    const anchor = document.createElement("a");
+    const image = canvas.toDataURL("image/jpeg");
 
-  /**
-   * Sets a new state
-   */
-  static updateState() {
-    const state = {
-      color: Color.currentColor,
-      layerList: Layer.layerList.map((e) => e),
-    };
-
-    this.stateList.push(state);
-
-    // Handles overflow
-    if (this.stateList.length > 5) {
-      this.stateList.shift();
-    }
-
-    this.stateIndex = this.stateList.length - 1;
-
-    console.log(this.stateList, this.stateIndex);
-  }
-
-  /**
-   * Back state
-   * @returns {Array<{color: Color, layers: Array<Layer>}}
-   */
-  static backState() {
-    this.stateIndex--;
-
-    return this.getState();
+    console.log(imageName);
+    anchor.download = imageName + ".jpeg";
+    anchor.href = image;
+    anchor.click();
   }
 }
 
 /**
  * Creates only one state manager
+ * @returns {StateManager}
  */
 export function createStateManager() {
   return createOne(StateManager);
