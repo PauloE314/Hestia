@@ -28,13 +28,27 @@ function main() {
   const stateManager = createStateManager();
 
   // Handles image name change
-  imageNameElement.addEventListener("input", () => {
-    imageName = imageNameElement.value;
+  imageNameElement.addEventListener("input", (e) => {
+    imageName = imageNameElement.innerHTML;
   });
 
   // Create layer
   createLayerElement.addEventListener("click", () => {
     const layer = createLayer();
+
+    // Drag logic
+    layer.onDrag = (sourceIndex, targetIndex) => {
+      const { layerList } = Layer;
+
+      const source = layerList[sourceIndex];
+      const target = layerList[targetIndex];
+
+      layerList[sourceIndex] = target;
+      layerList[targetIndex] = source;
+
+      Layer.renderLayerList();
+      screen.renderLayers(layerList);
+    };
 
     // Toggle visibility reload
     layer.onToggle = () => screen.renderLayers(Layer.layerList);
@@ -48,7 +62,6 @@ function main() {
     removeLayer(currentLayer);
     screen.renderLayers(Layer.layerList);
   });
-  createLayerElement.click();
 
   // Create color
   createColorElement.addEventListener("click", () =>
@@ -95,6 +108,11 @@ function setInitialState() {
 
   // Tool setup
   loadTools();
+
+  // Layer setup
+  createLayerElement.click();
+  createLayerElement.click();
+  createLayerElement.click();
 }
 
 /**

@@ -36,6 +36,7 @@ export default class Color {
     this.setColor(color);
 
     this.element.onclick = () => this.selectColor();
+
     this.element.ondblclick = () => {
       inputElement.value = this.value;
       inputElement.click();

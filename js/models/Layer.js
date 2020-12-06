@@ -23,6 +23,12 @@ export default class Layer {
   isVisible = true;
 
   /**
+   * Layer's visible label
+   * @type {string}
+   */
+  label = "";
+
+  /**
    * Created layer count helper
    * @type {number}
    */
@@ -51,7 +57,12 @@ export default class Layer {
    * @param {string} label Layer's label
    */
   constructor(label) {
+    Layer.layerCount++;
+    Layer.layerList.push(this);
+
+    this.label = label;
     this.element = document.createElement("li");
+    this.element.draggable = true;
     this.grid = [];
 
     const buttonElement = document.createElement("button");
@@ -62,6 +73,7 @@ export default class Layer {
     const labelElement = document.createElement("span");
     labelElement.innerHTML = label;
     labelElement.contentEditable = true;
+    labelElement.oninput = () => (this.label = labelElement.innerHTML);
 
     this.element.appendChild(labelElement);
     this.element.appendChild(buttonElement);
@@ -70,8 +82,20 @@ export default class Layer {
     this.element.onclick = (e) => this.selectLayer(e);
     this.selectLayer();
 
-    Layer.layerCount++;
-    Layer.layerList.push(this);
+    // Drag logic
+    this.element.ondragover = (e) => e.preventDefault();
+    this.element.ondragstart = (e) => {
+      const position = Layer.layerList.indexOf(this);
+      e.dataTransfer.setData("layerId", position);
+    };
+    this.element.ondrop = (e) => {
+      e.preventDefault();
+      const sourceIndex = Number(e.dataTransfer.getData("layerId"));
+      const targetIndex = Layer.layerList.indexOf(this);
+
+      this.onDrag(sourceIndex, targetIndex);
+    };
+
     Layer.layerListElement.appendChild(this.element);
   }
 
@@ -88,6 +112,13 @@ export default class Layer {
    * Toggle callback
    */
   onToggle() {}
+
+  /**
+   * Drag callback
+   * @param {number} sourceIndex
+   * @param {number} targetIndex
+   */
+  onDrag(sourceIndex, targetIndex) {}
 
   /**
    * Handle layer click
@@ -155,6 +186,18 @@ export default class Layer {
         return;
       }
     }
+  }
+
+  /**
+   * Render's layer list
+   */
+  static renderLayerList() {
+    const { layerListElement, layerList } = Layer;
+
+    layerListElement.innerHTML = "";
+    layerList.forEach((layer) => {
+      layerListElement.appendChild(layer.element);
+    });
   }
 }
 

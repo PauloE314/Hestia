@@ -47,6 +47,7 @@ export default class Screen {
     };
     this.canvas.onmousemove = (e) => {
       if (this.isMouseDown) this.onHold(e);
+      else this.onHover(e);
     };
   }
 
@@ -65,6 +66,11 @@ export default class Screen {
    * Function on something changes in grid
    */
   onChange() {}
+
+  /**
+   * Function which actives on grid hover
+   */
+  onHover() {}
 
   /**
    * Renders new state on screen
