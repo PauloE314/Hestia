@@ -185,6 +185,17 @@
   background-color: black;
   width: 100%;
 }
+#content #display #canvas-container {
+  position: relative;
+  user-select: none;
+}
+#content #display #canvas-container #position {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  color: gray;
+  font-size: 0.8rem;
+}
 /* Canvas */
 #content #display canvas {
   background-color: white;

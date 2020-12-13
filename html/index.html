@@ -19,7 +19,7 @@
           <button id="save" title="Salvar">
             <i class="fas fa-save icon"></i>
           </button>
-          <button id="undo" title="Desfazer">
+          <button id="undo" title="Desfazer" disabled>
             <i class="fas fa-undo icon"></i>
           </button>
           <button id="redo" title="Refazer" disabled>
@@ -45,7 +45,10 @@
           </ul>
         </aside>
         <main id="display">
-          <canvas></canvas>
+          <div id="canvas-container">
+            <span id="position">(0, 0)</span>
+            <canvas></canvas>
+          </div>
         </main>
         <aside id="controller-bar">
           <div id="layers">

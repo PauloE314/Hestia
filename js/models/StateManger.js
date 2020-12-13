@@ -8,7 +8,7 @@ import Screen from "./Screen.js";
  */
 class StateManager {
   /**
-   * @typedef {{label: string, isVisible: boolean, grid: Array<{x: number, y: number, color: string}} State
+   * @typedef {{layers: {label: string, isVisible: boolean, grid: {x: number, y: number, color: string}[] }[], currentLayer: number, colors: Array<string>, currentColor: number} State
    */
 
   /**
@@ -41,8 +41,13 @@ class StateManager {
    * Generates a new state
    * @param {Array<Layer>} layerList
    * @param {Array<Color>} colorList
+   * @param {Layer} currentLayer
+   * @param {Color} currentColor
    */
-  updateStateList(layerList, colorList) {
+  update(layerList, colorList, currentLayer, currentColor) {
+    const currentLayerId = layerList.indexOf(currentLayer);
+    const currentColorId = colorList.indexOf(currentColor);
+
     const currentState = {
       layers: layerList.map((layer) => ({
         label: layer.label,
@@ -54,6 +59,8 @@ class StateManager {
         })),
       })),
       colors: colorList.map((color) => color.value),
+      currentLayer: currentLayerId,
+      currentColor: currentColorId,
     };
 
     this.stateList.push(currentState);
@@ -62,7 +69,7 @@ class StateManager {
       this.stateList.shift();
     }
 
-    return this.stateList;
+    return this.forwardState();
   }
 
   /**
@@ -77,6 +84,8 @@ class StateManager {
    */
   backState() {
     this.stateIndex = Math.max(0, this.stateIndex - 1);
+
+    return this.getCurrentState();
   }
 
   /**
@@ -84,6 +93,8 @@ class StateManager {
    */
   forwardState() {
     this.stateIndex = Math.min(this.stateList.length - 1, this.stateIndex + 1);
+
+    return this.getCurrentState();
   }
 }
 

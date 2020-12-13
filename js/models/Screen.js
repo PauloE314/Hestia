@@ -39,38 +39,43 @@ export default class Screen {
     this.ctx = this.canvas.getContext("2d");
     this.setScreenSize(size);
 
-    this.canvas.onclick = (e) => this.onClick(e);
-    this.canvas.onmousedown = () => (this.isMouseDown = true);
+    this.canvas.onmousedown = (e) => {
+      this.isMouseDown = true;
+      this.onClick(e);
+    };
     this.canvas.onmouseup = () => {
       this.isMouseDown = false;
       this.onChange();
     };
     this.canvas.onmousemove = (e) => {
       if (this.isMouseDown) this.onHold(e);
-      else this.onHover(e);
+      this.onHover(e);
     };
   }
 
   /**
    * Function which actives on click and hover
+   * @param {MouseEvent} e
    */
-  onHold() {}
+  onHold(e) {}
 
   /**
    * Function which actives on click
-   * @param {MouseEvent}
+   * @param {MouseEvent} e
    */
   onClick(e) {}
 
   /**
    * Function on something changes in grid
+   * @param {MouseEvent} e
    */
-  onChange() {}
+  onChange(e) {}
 
   /**
    * Function which actives on grid hover
+   * @param {MouseEvent} e
    */
-  onHover() {}
+  onHover(e) {}
 
   /**
    * Renders new state on screen

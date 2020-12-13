@@ -5,6 +5,7 @@ import Layer, { createLayer, removeLayer } from "./models/Layer.js";
 import { toolAction } from "./models/Tool.js";
 import { createPen } from "./tools/Pen.js";
 import { createEraser } from "./tools/Eraser.js";
+import { renderChanges, setStateButtons } from "./utils/index.js";
 
 const imageNameElement = document.getElementById("title");
 const createLayerElement = document.getElementById("new-layer");
@@ -15,6 +16,7 @@ const redoElement = document.getElementById("redo");
 const undoElement = document.getElementById("undo");
 const saveElement = document.getElementById("save");
 const canvasElement = document.querySelector("canvas");
+const positionElement = document.getElementById("position");
 const displayElement = document.getElementById("display");
 const colorInputElement = document.getElementById("color-input");
 
@@ -27,13 +29,17 @@ function main() {
   const screen = createScreen(getMaxDimensions(displayElement), canvasElement);
   const stateManager = createStateManager();
 
+  // Loads tools
+  createPen();
+  createEraser();
+
   // Handles image name change
-  imageNameElement.addEventListener("input", (e) => {
+  function updateImageName() {
     imageName = imageNameElement.innerHTML;
-  });
+  }
 
   // Create layer
-  createLayerElement.addEventListener("click", () => {
+  function createNewLayer() {
     const layer = createLayer();
 
     // Drag logic
@@ -52,77 +58,134 @@ function main() {
 
     // Toggle visibility reload
     layer.onToggle = () => screen.renderLayers(Layer.layerList);
-  });
+  }
 
   // Remove layer
-  removeLayerElement.addEventListener("click", () => {
+  function removeCurrentLayer() {
     const { currentLayer } = Layer;
+    const { colorList } = Color;
 
     // Removes and reloads
     removeLayer(currentLayer);
     screen.renderLayers(Layer.layerList);
-  });
+    stateManager.update(Layer.layerList, colorList);
+  }
 
   // Create color
-  createColorElement.addEventListener("click", () =>
-    createColor("#ffffff", colorInputElement)
-  );
+  function createNewColor() {
+    createColor("#ffffff", colorInputElement);
+  }
 
   // Remove color
-  removeColorElement.addEventListener("click", () =>
-    removeColor(Color.currentColor)
-  );
+  function removeCurrentColor() {
+    const { colorList, currentColor } = Color;
+    const { layerList } = Layer;
 
-  // State logic
-  redoElement.addEventListener("click", () => {});
-  undoElement.addEventListener("click", () => {});
+    removeColor(currentColor);
+    stateManager.update(layerList, colorList);
+  }
 
   // Save logic
-  saveElement.addEventListener("click", () => {
+  function generateImage() {
     stateManager.generateImage(screen, imageName);
-  });
+  }
+
+  // Undo logic
+  function undoChanges() {
+    const backState = stateManager.backState();
+
+    renderChanges(backState, screen);
+
+    // Sets buttons disabled
+    setStateButtons(undoElement, redoElement, stateManager);
+  }
+
+  // Redo logic
+  function redoChanges() {
+    const forwardState = stateManager.forwardState();
+
+    // Renders colors
+    renderChanges(forwardState, screen);
+
+    // Sets buttons disabled
+    setStateButtons(undoElement, redoElement, stateManager);
+  }
+
+  // Handle resize
+  function handleResize() {
+    const { layerList } = Layer;
+
+    screen.setScreenSize(getMaxDimensions(displayElement));
+    screen.renderLayers(layerList);
+  }
+
+  // Screen actions
+  const screenClick = (e) => toolAction(screen, "clickAction", e);
+  const screenHold = (e) => toolAction(screen, "holdAction", e);
+  const screenChange = () => {
+    const currentColor = Color.currentColor;
+    const currentLayer = Layer.currentLayer;
+    const currentStateId = stateManager.stateIndex + 1;
+
+    // Removes next states
+    stateManager.stateList = stateManager.stateList.slice(0, currentStateId);
+
+    // Updates state
+    stateManager.update(
+      Layer.layerList,
+      Color.colorList,
+      currentLayer,
+      currentColor
+    );
+
+    // Sets undo element enabled
+    setStateButtons(undoElement, redoElement, stateManager);
+  };
+  const screenHover = (e) => {
+    const { x, y } = screen.getGridPositionOnScreen(e.clientX, e.clientY);
+    positionElement.innerHTML = `(${x}, ${y})`;
+  };
 
   // Screen logic
-  screen.onClick = (e) => toolAction(screen, "clickAction", e);
-  screen.onHold = (e) => toolAction(screen, "holdAction", e);
-  screen.onChange = () => {};
+  screen.onClick = screenClick;
+  screen.onHold = screenHold;
+  screen.onHover = screenHover;
+  screen.onChange = screenChange;
+
+  // Listeners
+  imageNameElement.addEventListener("input", updateImageName);
+  createLayerElement.addEventListener("click", createNewLayer);
+  removeLayerElement.addEventListener("click", removeCurrentLayer);
+  createColorElement.addEventListener("click", createNewColor);
+  removeColorElement.addEventListener("click", removeCurrentColor);
+  redoElement.addEventListener("click", redoChanges);
+  undoElement.addEventListener("click", undoChanges);
+  saveElement.addEventListener("click", generateImage);
+  window.addEventListener("resize", handleResize);
 }
-
-// Handle resize
-window.addEventListener("resize", () => {
-  const { layerList } = Layer;
-  const screen = Screen.instance;
-
-  screen.setScreenSize(getMaxDimensions(displayElement));
-  screen.renderLayers(layerList);
-});
 
 /**
  * Set's application's initial state
  */
 function setInitialState() {
+  const screen = Screen.instance;
+
   // Color setup
   createColor("#ff0000", colorInputElement);
   createColor("#00ff00", colorInputElement);
   createColor("#0000ff", colorInputElement);
 
-  // Tool setup
-  loadTools();
-
   // Layer setup
   createLayerElement.click();
   createLayerElement.click();
   createLayerElement.click();
-}
 
-/**
- * Loads all tools
- */
-function loadTools() {
-  createPen();
-  createEraser();
+  // Screen setup
+  screen.onChange();
 }
 
 // Source code
-main();
-setInitialState();
+window.onload = () => {
+  main();
+  setInitialState();
+};

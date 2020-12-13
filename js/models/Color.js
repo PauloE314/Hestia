@@ -92,6 +92,23 @@ export default class Color {
     }
     Color.currentColor = null;
   }
+
+  /**
+   * Deletes all colors
+   */
+  static removeAll() {
+    Color.currentColor = null;
+    Color.colorList.forEach((color) => color.removeColor());
+  }
+
+  /**
+   * Loads new colors
+   * @param {string[]} colorList
+   * @param {HTMLInputElement} inputElement
+   */
+  static loadColors(colorList, inputElement) {
+    colorList.forEach((color) => createColor(color, inputElement));
+  }
 }
 
 /**

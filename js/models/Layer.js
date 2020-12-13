@@ -140,17 +140,17 @@ export default class Layer {
    * Deletes current layer
    */
   removeLayer() {
-    if (Layer.currentLayer) {
-      const index = Layer.layerList.indexOf(Layer.currentLayer);
-      const newLayer = Layer.layerList[index - 1 < 0 ? 0 : index - 1];
+    const { layerList, layerListElement } = Layer;
 
-      Layer.layerListElement.removeChild(Layer.currentLayer.element);
-      Layer.layerList = Layer.layerList.filter((layer) => layer !== this);
+    const index = layerList.indexOf(this);
+    const newLayer = layerList[index - 1 < 0 ? 0 : index - 1];
 
-      // Selects current layer
-      if (newLayer) {
-        newLayer.selectLayer();
-      }
+    layerListElement.removeChild(this.element);
+    Layer.layerList = layerList.filter((layer) => layer !== this);
+
+    // Selects current layer
+    if (newLayer) {
+      newLayer.selectLayer();
     }
   }
 
@@ -197,6 +197,34 @@ export default class Layer {
     layerListElement.innerHTML = "";
     layerList.forEach((layer) => {
       layerListElement.appendChild(layer.element);
+    });
+  }
+
+  /**
+   * Deletes all Layers
+   */
+  static removeAll() {
+    Layer.currentLayer = null;
+    Layer.layerList.forEach((layer) => layer.removeLayer());
+  }
+
+  /**
+   * Loads layer list
+   * @param {Array} layerList
+   */
+  static loadLayers(layerList) {
+    layerList.forEach(({ label, isVisible, grid }) => {
+      // Creates layer
+      const layer = new Layer(label);
+
+      // Sets pixels
+      grid.forEach(({ x, y, color }) => layer.setPixel(x, y, color));
+
+      // Set opacity
+      if (!isVisible) layer.toggleVisibility();
+
+      // Renders
+      Layer.renderLayerList();
     });
   }
 }
