@@ -5,7 +5,9 @@ import Layer, { createLayer, removeLayer } from "./models/Layer.js";
 import { toolAction } from "./models/Tool.js";
 import { createPen } from "./tools/Pen.js";
 import { createEraser } from "./tools/Eraser.js";
-import { renderChanges, setStateButtons } from "./utils/index.js";
+import { renderChanges, renderState, setStateButtons } from "./utils/index.js";
+
+import initialState from "./setup.js";
 
 const imageNameElement = document.getElementById("title");
 const createLayerElement = document.getElementById("new-layer");
@@ -22,13 +24,12 @@ const colorInputElement = document.getElementById("color-input");
 
 var imageName = imageNameElement.innerHTML;
 
+const screen = createScreen(getMaxDimensions(displayElement), canvasElement);
+const stateManager = createStateManager();
 /**
  * Application's main function
  */
 function main() {
-  const screen = createScreen(getMaxDimensions(displayElement), canvasElement);
-  const stateManager = createStateManager();
-
   // Loads tools
   createPen();
   createEraser();
@@ -95,8 +96,6 @@ function main() {
     const backState = stateManager.backState();
 
     renderChanges(backState, screen);
-
-    // Sets buttons disabled
     setStateButtons(undoElement, redoElement, stateManager);
   }
 
@@ -104,10 +103,7 @@ function main() {
   function redoChanges() {
     const forwardState = stateManager.forwardState();
 
-    // Renders colors
     renderChanges(forwardState, screen);
-
-    // Sets buttons disabled
     setStateButtons(undoElement, redoElement, stateManager);
   }
 
@@ -167,25 +163,19 @@ function main() {
 /**
  * Set's application's initial state
  */
-function setInitialState() {
-  const screen = Screen.instance;
+function setup() {
+  renderState(initialState, screen, colorInputElement);
 
-  // Color setup
-  createColor("#ff0000", colorInputElement);
-  createColor("#00ff00", colorInputElement);
-  createColor("#0000ff", colorInputElement);
-
-  // Layer setup
-  createLayerElement.click();
-  createLayerElement.click();
-  createLayerElement.click();
-
-  // Screen setup
-  screen.onChange();
+  stateManager.update(
+    Layer.layerList,
+    Color.colorList,
+    Layer.currentLayer,
+    Color.currentColor
+  );
 }
 
 // Source code
 window.onload = () => {
   main();
-  setInitialState();
+  setup();
 };

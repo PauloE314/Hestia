@@ -40,12 +40,12 @@ export function renderState(state, screen, inputElement) {
   // Renders colors
   Color.removeAll();
   Color.loadColors(colors, inputElement);
-  Color.colorList[currentColor].selectColor();
+  Color.colorList[currentColor || 0].selectColor();
 
   // Renders layers
   Layer.removeAll();
   Layer.loadLayers(layers);
-  Layer.layerList[currentLayer].selectLayer();
+  Layer.layerList[currentLayer || 0].selectLayer();
   screen.renderLayers(Layer.layerList);
 }
 
