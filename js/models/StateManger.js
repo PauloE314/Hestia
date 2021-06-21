@@ -30,9 +30,9 @@ class StateManager {
     const { canvas } = screen;
 
     const anchor = document.createElement("a");
-    const image = canvas.toDataURL("image/jpeg");
+    const image = canvas.toDataURL("image/png");
 
-    anchor.download = imageName + ".jpeg";
+    anchor.download = imageName + ".png";
     anchor.href = image;
     anchor.click();
   }

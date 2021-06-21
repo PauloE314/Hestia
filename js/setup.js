@@ -3,11 +3,7 @@ export default {
     {
       label: "Label",
       isVisible: true,
-      grid: [
-        { x: 0, y: 0, color: "#ff0000" },
-        { x: 1, y: 0, color: "#00ff00" },
-        { x: 2, y: 0, color: "#0000ff" },
-      ],
+      grid: [],
     },
   ],
   colors: ["#ff0000", "#ffff00"],
